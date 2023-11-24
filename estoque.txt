@@ -1,0 +1,153 @@
+== RawMaterial ==
+
+Raw Material ID (primary key)
+Raw Material Name
+Quantity in Stock
+Unit of Measure (kilograms, liters, etc.)
+Supplier ID (foreign key related to the Suppliers table)
+Purchase Date
+Purchase Price
+Supplier Name (denormalized for ease of use)
+Supplier Address ID (foreign key related to the SupplierAddresses table)
+
+===================================
+== Supplier ==
+
+Supplier ID (primary key)
+Supplier Name
+Supplier Address ID (foreign key related to the SupplierAddresses table)
+Contact (phone, email)
+List of Supplied Materials (can be a list of Raw Material IDs)
+
+===============================
+== SupplierAddress ==
+
+Address ID (primary key)
+Supplier ID (foreign key related to the Suppliers table)
+State
+City
+District
+Street
+Number
+ZIP Code
+
+================================
+== Production ==
+
+Production ID (primary key)
+Final Product
+Quantity Produced
+Start Date
+End Date
+Used Raw Materials (can be a list of Raw Material IDs)
+Person in Charge of Production
+Production Status (in progress, completed, etc.)
+
+
+=====  TABLE EXAMPLE ====
+
+-- Tabela de Matéria-Prima
+CREATE TABLE RawMaterial (
+    RawMaterialID INT PRIMARY KEY,
+    RawMaterialName VARCHAR(255),
+    QuantityInStock INT,
+    UnitOfMeasure VARCHAR(50),
+    SupplierID INT,
+    PurchaseDate DATE,
+    PurchasePrice DECIMAL(10, 2),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID),
+    FOREIGN KEY (SupplierAddressID) REFERENCES SupplierAddress(AddressID)
+);
+
+-- Tabela de Fornecedor
+CREATE TABLE Supplier (
+    SupplierID INT PRIMARY KEY,
+    SupplierName VARCHAR(255),
+    ContactPhone VARCHAR(20),
+    ContactEmail VARCHAR(255)
+);
+
+-- Tabela de Endereço do Fornecedor
+CREATE TABLE SupplierAddress (
+    AddressID INT PRIMARY KEY,
+    SupplierID INT,
+    State VARCHAR(50),
+    City VARCHAR(100),
+    District VARCHAR(100),
+    Street VARCHAR(255),
+    Number VARCHAR(20),
+    ZIPCode VARCHAR(20),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID)
+);
+
+-- Tabela de Produção
+CREATE TABLE Production (
+    ProductionID INT PRIMARY KEY,
+    FinalProduct VARCHAR(255),
+    QuantityProduced INT,
+    StartDate DATE,
+    EndDate DATE,
+    PersonInCharge VARCHAR(255),
+    ProductionStatus VARCHAR(50)
+);
+
+-- Tabela de Materiais Utilizados na Produção (relacionamento muitos para muitos)
+CREATE TABLE ProductionRawMaterials (
+    ProductionID INT,
+    RawMaterialID INT,
+    PRIMARY KEY (ProductionID, RawMaterialID),
+    FOREIGN KEY (ProductionID) REFERENCES Production(ProductionID),
+    FOREIGN KEY (RawMaterialID) REFERENCES RawMaterial(RawMaterialID)
+);
+
+
+========
+
+Matéria-Prima (RawMaterial):
+
+raw_material table
+raw_material_id (PK)
+raw_material_name
+quantity_in_stock
+unit_of_measure
+supplier_id (FK)
+purchase_date
+purchase_price
+Fornecedor (Supplier):
+
+supplier table
+supplier_id (PK)
+supplier_name
+supplier_contact table (para lidar com vários contatos)
+contact_id (PK)
+supplier_id (FK)
+contact_type (por exemplo, 'phone', 'email')
+contact_value (o número de telefone ou e-mail)
+Endereço do Fornecedor (SupplierAddress):
+
+supplier_address table
+address_id (PK)
+supplier_id (FK)
+state
+city
+district
+street
+number
+zip_code
+Produção (Production):
+
+production table
+production_id (PK)
+final_product
+quantity_produced
+start_date
+end_date
+person_in_charge
+production_status
+Materiais Utilizados na Produção (ProductionRawMaterials):
+
+production_raw_materials table (relacionamento muitos-para-muitos)
+production_id (FK)
+raw_material_id (FK)
+PRIMARY KEY (production_id, raw_material_id)
+O modelo de dados acima representa relacionamentos de "um para muitos" entre Supplier e SupplierContact, Supplier e SupplierAddress, e RawMaterial e Production. O relacionamento "muitos para muitos" entre Production e RawMaterial é representado por uma tabela de junção chamada production_raw_materials.
