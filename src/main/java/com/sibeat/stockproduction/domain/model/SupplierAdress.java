@@ -14,6 +14,9 @@ public class SupplierAdress {
     private String number;
     private String zipCode;
 
+    @ManyToOne
+    private Supplier supplier;
+
     public int getAdressID() {
         return adressID;
     }
@@ -32,6 +35,14 @@ public class SupplierAdress {
 
     public String getCity() {
         return city;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public void setCity(String city) {

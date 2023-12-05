@@ -15,7 +15,28 @@ public class Supplier {
     private List<String> contactEmail;
 
     // private List<RawMaterial> suppliedMaterials;
+    @OneToMany
+    private RawMaterial rawMaterial;
+
     // private SupplierAddress supplierAddress;
+    @OneToMany
+    private List<SupplierAdress> supplierAdress;
+
+    public RawMaterial getRawMaterial() {
+        return rawMaterial;
+    }
+
+    public void setRawMaterial(RawMaterial rawMaterial) {
+        this.rawMaterial = rawMaterial;
+    }
+
+    public List<SupplierAdress> getSupplierAdress() {
+        return supplierAdress;
+    }
+
+    public void setSupplierAdress(List<SupplierAdress> supplierAdress) {
+        this.supplierAdress = supplierAdress;
+    }
 
     public Long getId() {
         return id;

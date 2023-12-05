@@ -2,6 +2,7 @@ package com.sibeat.stockproduction.domain.model;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "tb_stockfeed")
 public class RawMaterial {
@@ -14,16 +15,19 @@ public class RawMaterial {
     private int quantityInStock;
     private Date purchaseDate;
 
-    // private int supplierID;
     // private Supplier supplier;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Supplier> supplier;
+
+    // private int supplierID;
     // private SupplierAddress supplierAddress;
 
-    public Long getId() {
-        return id;
+    public List<Supplier> getSupplier() {
+        return supplier;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSupplier(List<Supplier> supplier) {
+        this.supplier = supplier;
     }
 
     public String getRawMaterialName() {
@@ -32,6 +36,14 @@ public class RawMaterial {
 
     public void setRawMaterialName(String rawMaterialName) {
         this.rawMaterialName = rawMaterialName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getQuantityInStock() {
